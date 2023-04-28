@@ -1,6 +1,6 @@
 export const gameStart = (req, res) => {
-  const keyword = ["apple", "umbrella", "volcano", "ball"];
-  res.render("index.ejs", { keyword });
+  let keywords = ["apple", "umbrella", "volcano", "ball"];
+  res.render("index.ejs", { keywords });
 };
 
 export const gameResult = (req, res) => {

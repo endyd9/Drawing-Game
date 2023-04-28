@@ -6,7 +6,6 @@ const fileInput = document.getElementById("file");
 const textInput = document.getElementById("text");
 const saveBtn = document.getElementById("save");
 const lineColor = document.getElementById("color");
-const colorOption = Array.from(document.getElementsByClassName("color-option"));
 
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
@@ -98,9 +97,8 @@ const onDoubleClick = (event) => {
 };
 const onSaveClick = () => {
   const test = document.querySelector(".test");
-  data = canvas.toDataURL();
+  const data = canvas.toDataURL();
   test.value = data.replace(/^data:image\/(png|jpg);base64,/, "");
-  console.log(test.value);
 };
 
 canvas.addEventListener("mousemove", onMove);
@@ -110,13 +108,9 @@ canvas.addEventListener("mouseleave", stopDraw);
 canvas.addEventListener("click", onCanvasClick);
 canvas.addEventListener("dblclick", onDoubleClick);
 
-lineWidth.addEventListener("change", onLineWidthChange);
 lineColor.addEventListener("change", onColorChange);
-
-colorOption.forEach((color) => color.addEventListener("click", onColorClick));
 
 modeBtn.addEventListener("click", onModeClick);
 resetBtn.addEventListener("click", onResetClick);
 eraserBtn.addEventListener("click", onEraserClick);
-fileInput.addEventListener("change", onFileChange);
 saveBtn.addEventListener("mousedown", onSaveClick);
