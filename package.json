@@ -4,7 +4,7 @@
   "main": "server.js",
   "scripts": {
     "test": "test",
-    "start": "nodemon --exec babel-node src/server.js"
+    "start": "nodemon --exec babel-node --max-http-header-size=32768000 src/server.js"
   },
   "author": "me",
   "license": "ISC",

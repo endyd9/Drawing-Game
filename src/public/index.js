@@ -95,10 +95,34 @@ const onDoubleClick = (event) => {
   ctx.fillText(text, event.offsetX, event.offsetY);
   ctx.restore();
 };
+// const onSaveClick = () => {
+//   const test = document.querySelector(".test");
+//   const data = canvas.toDataURL();
+//   test.value = data.replace(/^data:image\/(png|jpg);base64,/, "");
+// };
 const onSaveClick = () => {
   const test = document.querySelector(".test");
+  const keyword = document.querySelector(".keyword");
   const data = canvas.toDataURL();
   test.value = data.replace(/^data:image\/(png|jpg);base64,/, "");
+  const url = { url: test.value };
+  fetch(`/api/`, {
+    method: "post",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({
+      url,
+      keyword: keyword.innerText,
+    }),
+  }).then(console.log(1));
+};
+const gameTimer = () => {
+  const form = document.querySelector("form");
+  const submit = document.createElement("button");
+  submit.value = "ㅎㅇ";
+  form.appendChild(submit);
+  setTimeout(() => submit.click(), 60000);
 };
 
 canvas.addEventListener("mousemove", onMove);
@@ -114,3 +138,5 @@ modeBtn.addEventListener("click", onModeClick);
 resetBtn.addEventListener("click", onResetClick);
 eraserBtn.addEventListener("click", onEraserClick);
 saveBtn.addEventListener("mousedown", onSaveClick);
+
+addEventListener("load", gameTimer);

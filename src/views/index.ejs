@@ -11,7 +11,6 @@
 
 <% let cnt=0; const shuffleArray=(sourceArr)=> {
     const array = sourceArr.concat();
-    // 피셔 예이츠 알고리즘
     const arrayLength = array.length;
     for (let i = arrayLength - 1; i >= 0; i--) {
     const randomIndex = Math.floor(Math.random() * (i + 1));
@@ -25,15 +24,21 @@
 
     <body>
         <header>
-            <h1>VisionAPI's Keyword &darr; </h1>
+            <h1>Keyword &darr; </h1>
             <br>
-            <h1>
+            <h1 class="keyword">
                 <%=shuffled[cnt]%>
             </h1>
+            <br>
+            <h2 id="time">time : 01:00
+            </h2>
         </header>
 
         <canvas></canvas>
         <form method="post">
+            <h1 class="score">
+            </h1>
+            <br>
             <div class="btns">
                 <label for="color">
                     Chose Color
@@ -43,12 +48,16 @@
                 <button type="button" id="mode-btn">🪣Fill</button>
                 <button type="button" id="reset-btn">❌Reset</button>
                 <button type="button" id="eraser-btn">Erase</button>
-                <button id="save">Submit</button>
+                <button id="save" type="button">Submit</button>
                 <input type="text" name="url" class="test" style="display: none">
                 <input type="text" name="keyword" value="<%=shuffled[cnt]%>" style="display:none">
             </div>
         </form>
     </body>
     <script src="/lib/index.js"></script>
+    <script>
+        const score = document.querySelector(".score");
+        score.innerText = "맞춘 갯수 : <%=result%>"
+    </script>
 
 </html>

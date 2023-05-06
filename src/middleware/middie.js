@@ -1,31 +1,30 @@
 import fs from "fs";
+import google from "@google-cloud/vision";
 
-export const decodingImg = (req, res, next) => {
+export const getAnswer = (req, res, next) => {
   const { url } = req.body;
-  const buffer = Buffer.from(url, "base64");
+  const buffer = Buffer.from(url.url, "base64");
   fs.writeFileSync("./src/resources/image.png", buffer);
   next();
 };
-import google from "@google-cloud/vision";
 
 export const vision = async (req, res, next) => {
   console.log("API작동중");
   const { keyword } = req.body;
+  console.log(keyword);
   const vision = google;
 
   const client = new vision.ImageAnnotatorClient();
 
-  const [result] = await client.labelDetection("./src/resources/image.png");
+  const [results] = await client.labelDetection("./src/resources/image.png");
 
-  const labels = result.labelAnnotations;
+  const labels = results.labelAnnotations;
   labels.forEach((label) => {
-    console.log(label.description.toLowerCase(), keyword.toLowerCase());
     if (label.description.toLowerCase() === keyword.toLowerCase()) {
-      req.result = "맞춤";
-      next();
-    } else {
-      req.result = "틀림";
-      next();
+      console.log("정답");
+      return res.sendStatus(200);
     }
+    console.log("오답");
+    console.log(req.result);
   });
 };
