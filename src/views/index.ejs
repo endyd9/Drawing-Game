@@ -24,19 +24,22 @@
 
     <body>
         <header>
+            <h1 id="timer">TIME : 0:00</h1>
+            <br>
             <h1>Keyword &darr; </h1>
             <br>
             <h1 class="keyword">
                 <%=shuffled[cnt]%>
             </h1>
-            <br>
-            <h2 id="time">time : 01:00
-            </h2>
+
+
+
         </header>
 
         <canvas></canvas>
         <form method="post">
             <h1 class="score">
+                맞춘 갯수 : 0
             </h1>
             <br>
             <div class="btns">
@@ -48,16 +51,10 @@
                 <button type="button" id="mode-btn">🪣Fill</button>
                 <button type="button" id="reset-btn">❌Reset</button>
                 <button type="button" id="eraser-btn">Erase</button>
-                <button id="save" type="button">Submit</button>
-                <input type="text" name="url" class="test" style="display: none">
-                <input type="text" name="keyword" value="<%=shuffled[cnt]%>" style="display:none">
+                <button id="submit" type="button">Submit</button>
             </div>
         </form>
     </body>
     <script src="/lib/index.js"></script>
-    <script>
-        const score = document.querySelector(".score");
-        score.innerText = "맞춘 갯수 : <%=result%>"
-    </script>
 
 </html>

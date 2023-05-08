@@ -1,8 +1,11 @@
 import express from "express";
-import { mainRouter, apiRouter } from "./router/Router.js";
+import session from "express-session";
+import { mainRouter } from "./router/mainRouter.js";
+import { apiRouter } from "./router/apiRouter.js";
 import morgan from "morgan";
 import { Server } from "socket.io";
 import { createServer } from "http";
+import { memoryStorage } from "multer";
 
 const app = express();
 
@@ -17,6 +20,15 @@ const PORT = 4500;
 app.set("view engine", "ejs");
 app.set("views", process.cwd() + "/src/views");
 app.use(express.urlencoded({ extended: true, limit: 9999999999999 }));
+app.use(
+  session({
+    secret: "secretkey",
+    resave: false,
+    saveUninitialized: false,
+    // store: new memoryStorage({ checkPeriod: 10000 }),
+    cokie: { maxAge: 10000 },
+  })
+);
 
 const handleListening = () => console.log(` ✅ Sever Runing on port ${PORT} `);
 

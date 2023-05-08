@@ -1,12 +1,13 @@
 export const gameStart = (req, res) => {
   let keywords = ["apple", "umbrella", "volcano", "ball"];
-  req.result = 0;
-  const { result } = req;
-  console.log(result);
-  res.render("index.ejs", { keywords, result });
+  req.session.score = 0;
+  console.log("시작 점수 : " + req.session.score);
+  res.render("index.ejs", { keywords });
 };
 
 export const gameResult = (req, res) => {
-  console.log(req.result);
-  res.render("result.ejs", { result: req.result });
+  const {
+    session: { score },
+  } = req;
+  res.render("result.ejs", { result: score });
 };

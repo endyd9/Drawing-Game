@@ -4,8 +4,10 @@ const eraserBtn = document.getElementById("eraser-btn");
 const lineWidth = document.getElementById("line-width");
 const fileInput = document.getElementById("file");
 const textInput = document.getElementById("text");
-const saveBtn = document.getElementById("save");
+const submitBtn = document.getElementById("submit");
 const lineColor = document.getElementById("color");
+
+const scoreText = document.querySelector(".score");
 
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
@@ -19,7 +21,10 @@ ctx.lineWidth = lineWidth.value;
 ctx.lineCap = "round";
 let isPainting = false;
 let isFilling = false;
+ctx.fillStyle = "white";
+ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
+// canvas funtions
 const onMove = (event) => {
   if (isPainting) {
     ctx.lineTo(event.offsetX, event.offsetY);
@@ -95,18 +100,14 @@ const onDoubleClick = (event) => {
   ctx.fillText(text, event.offsetX, event.offsetY);
   ctx.restore();
 };
-// const onSaveClick = () => {
-//   const test = document.querySelector(".test");
-//   const data = canvas.toDataURL();
-//   test.value = data.replace(/^data:image\/(png|jpg);base64,/, "");
-// };
-const onSaveClick = () => {
-  const test = document.querySelector(".test");
-  const keyword = document.querySelector(".keyword");
+// canvas funtions
+
+// call visionAPI
+const onSubmitClick = async () => {
   const data = canvas.toDataURL();
-  test.value = data.replace(/^data:image\/(png|jpg);base64,/, "");
-  const url = { url: test.value };
-  fetch(`/api/`, {
+  const keyword = document.querySelector(".keyword");
+  const url = { url: data.replace(/^data:image\/(png|jpg);base64,/, "") };
+  const response = await fetch(`/api/`, {
     method: "post",
     headers: {
       "Content-type": "application/json",
@@ -115,15 +116,43 @@ const onSaveClick = () => {
       url,
       keyword: keyword.innerText,
     }),
-  }).then(console.log(1));
+  });
+  console.log(response.status);
+  if (response.status === 200) {
+    const { score } = await response.json();
+    if (score === 5) {
+      gameSet();
+    }
+    scoreText.innerText = `맞춘 갯수 : ${score}`;
+  }
 };
+// call visionAPI
+
+// set Timer
 const gameTimer = () => {
+  let min = 2;
+  let sec = 59;
+  setInterval(() => {
+    timer = document.getElementById("timer");
+    sec >= 10
+      ? (timer.innerText = `TIME : ${min}:${sec}`)
+      : (timer.innerText = `TIME : ${min}:0${sec}`);
+    sec -= 1;
+    if (sec <= 0) {
+      min -= 1;
+      sec = 59;
+    }
+  }, 1000);
+  setTimeout(gameSet, 180000);
+};
+const gameSet = () => {
   const form = document.querySelector("form");
   const submit = document.createElement("button");
   submit.value = "ㅎㅇ";
   form.appendChild(submit);
-  setTimeout(() => submit.click(), 60000);
+  submit.click();
 };
+// set Timer
 
 canvas.addEventListener("mousemove", onMove);
 canvas.addEventListener("mousedown", startDraw);
@@ -137,6 +166,6 @@ lineColor.addEventListener("change", onColorChange);
 modeBtn.addEventListener("click", onModeClick);
 resetBtn.addEventListener("click", onResetClick);
 eraserBtn.addEventListener("click", onEraserClick);
-saveBtn.addEventListener("mousedown", onSaveClick);
+submitBtn.addEventListener("mousedown", onSubmitClick);
 
 addEventListener("load", gameTimer);
