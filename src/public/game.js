@@ -112,6 +112,18 @@ const onSubmitClick = async () => {
   const data = canvas.toDataURL();
   const keyword = document.querySelector(".keyword").innerText;
   const url = { url: data.replace(/^data:image\/(png|jpg);base64,/, "") };
+  const loading = setInterval(() => {
+    document.querySelector(".result").style.color = "black";
+    document.querySelector(".result").innerText = "채점중.";
+    setTimeout(
+      () => (document.querySelector(".result").innerText = "채점중.."),
+      250
+    );
+    setTimeout(
+      () => (document.querySelector(".result").innerText = "채점중..."),
+      500
+    );
+  }, 1000);
   const response = await fetch(`/api/`, {
     method: "post",
     headers: {
@@ -124,6 +136,7 @@ const onSubmitClick = async () => {
   });
   const { score, result } = await response.json();
   if (response.status === 201) {
+    clearInterval(loading);
     onResetClick();
     keywordCnt += 1;
     keywordChange();
@@ -136,6 +149,7 @@ const onSubmitClick = async () => {
     document.querySelector(".result").innerText = result;
     setTimeout(() => (document.querySelector(".result").innerText = ""), 1000);
   } else if (response.status === 200) {
+    clearInterval(loading);
     document.querySelector(".result").style.color = "red";
     document.querySelector(".result").innerText = result;
     setTimeout(() => (document.querySelector(".result").innerText = ""), 1000);
@@ -162,7 +176,7 @@ const gameTimer = () => {
       sec = 59;
     }
   }, 1000);
-  setTimeout(gameSet, 178500);
+  setTimeout(gameSet, 180000);
 };
 const gameSet = () => {
   const form = document.querySelector("form");
