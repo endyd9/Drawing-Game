@@ -1,14 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drawing Game</title>
-    <link rel="stylesheet" href="/lib/style.css">
-</head>
-
 <% let cnt=0; const shuffleArray=(sourceArr)=> {
     const array = sourceArr.concat();
     const arrayLength = array.length;
@@ -16,30 +7,36 @@
     const randomIndex = Math.floor(Math.random() * (i + 1));
     [array[i], array[randomIndex]] = [array[randomIndex], array[i]];
     }
-
     return array;
     };
     const shuffled = shuffleArray(keywords);
+
     %>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Drawing Game</title>
+        <link rel="stylesheet" href="/lib/game.css">
+    </head>
+
+
 
     <body>
         <header>
             <h1 id="timer">TIME : 0:00</h1>
             <br>
             <h1>Keyword &darr; </h1>
-            <br>
             <h1 class="keyword">
-                <%=shuffled[cnt]%>
             </h1>
-
-
-
+            <h1 class="result"></h1>
         </header>
 
         <canvas></canvas>
-        <form method="post">
+        <form method="post" action="/result">
             <h1 class="score">
-                맞춘 갯수 : 0
+                Score : 0
             </h1>
             <br>
             <div class="btns">
@@ -53,8 +50,11 @@
                 <button type="button" id="eraser-btn">Erase</button>
                 <button id="submit" type="button">Submit</button>
             </div>
+            <p class="keywordContainer" style="display: none;">
+                <%=shuffled%>
+            </p>
         </form>
     </body>
-    <script src="/lib/index.js"></script>
+    <script src="/lib/game.js"></script>
 
 </html>

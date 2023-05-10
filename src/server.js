@@ -25,7 +25,6 @@ app.use(
     secret: "secretkey",
     resave: false,
     saveUninitialized: false,
-    // store: new memoryStorage({ checkPeriod: 10000 }),
     cokie: { maxAge: 10000 },
   })
 );

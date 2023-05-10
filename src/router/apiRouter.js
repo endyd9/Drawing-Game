@@ -1,5 +1,5 @@
 import express from "express";
-import { getAnswer, vision } from "../middleware/middie.js";
+import { getAnswer, vision } from "../controller/apiController.js";
 
 export const apiRouter = express.Router();
 

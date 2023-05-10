@@ -24,6 +24,11 @@ let isFilling = false;
 ctx.fillStyle = "white";
 ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
+const keywords = document
+  .querySelector(".keywordContainer")
+  .innerText.split(",");
+let keywordCnt = 0;
+
 // canvas funtions
 const onMove = (event) => {
   if (isPainting) {
@@ -105,7 +110,7 @@ const onDoubleClick = (event) => {
 // call visionAPI
 const onSubmitClick = async () => {
   const data = canvas.toDataURL();
-  const keyword = document.querySelector(".keyword");
+  const keyword = document.querySelector(".keyword").innerText;
   const url = { url: data.replace(/^data:image\/(png|jpg);base64,/, "") };
   const response = await fetch(`/api/`, {
     method: "post",
@@ -114,26 +119,40 @@ const onSubmitClick = async () => {
     },
     body: JSON.stringify({
       url,
-      keyword: keyword.innerText,
+      keyword,
     }),
   });
-  console.log(response.status);
-  if (response.status === 200) {
-    const { score } = await response.json();
+  const { score, result } = await response.json();
+  if (response.status === 201) {
+    onResetClick();
+    keywordCnt += 1;
+    keywordChange();
     if (score === 5) {
+      scoreText.innerText = `Score : ${score}`;
       gameSet();
     }
-    scoreText.innerText = `맞춘 갯수 : ${score}`;
+    scoreText.innerText = `Score : ${score}`;
+    document.querySelector(".result").style.color = "blue";
+    document.querySelector(".result").innerText = result;
+    setTimeout(() => (document.querySelector(".result").innerText = ""), 1000);
+  } else if (response.status === 200) {
+    document.querySelector(".result").style.color = "red";
+    document.querySelector(".result").innerText = result;
+    setTimeout(() => (document.querySelector(".result").innerText = ""), 1000);
   }
 };
 // call visionAPI
+
+const keywordChange = () => {
+  document.querySelector(".keyword").innerText = keywords[keywordCnt].trim();
+};
 
 // set Timer
 const gameTimer = () => {
   let min = 2;
   let sec = 59;
   setInterval(() => {
-    timer = document.getElementById("timer");
+    const timer = document.getElementById("timer");
     sec >= 10
       ? (timer.innerText = `TIME : ${min}:${sec}`)
       : (timer.innerText = `TIME : ${min}:0${sec}`);
@@ -143,7 +162,7 @@ const gameTimer = () => {
       sec = 59;
     }
   }, 1000);
-  setTimeout(gameSet, 180000);
+  setTimeout(gameSet, 178500);
 };
 const gameSet = () => {
   const form = document.querySelector("form");
@@ -161,6 +180,7 @@ canvas.addEventListener("mouseleave", stopDraw);
 canvas.addEventListener("click", onCanvasClick);
 canvas.addEventListener("dblclick", onDoubleClick);
 
+lineWidth.addEventListener("change", onLineWidthChange);
 lineColor.addEventListener("change", onColorChange);
 
 modeBtn.addEventListener("click", onModeClick);
@@ -169,3 +189,4 @@ eraserBtn.addEventListener("click", onEraserClick);
 submitBtn.addEventListener("mousedown", onSubmitClick);
 
 addEventListener("load", gameTimer);
+addEventListener("load", keywordChange);
