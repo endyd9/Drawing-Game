@@ -1,5 +1,5 @@
 export const gameStart = (req, res) => {
-  let keywords = ["apple", "umbrella", "volcano", "ball"];
+  let keywords = ["apple", "umbrella", "volcano", "ball", "banana", "ruby"];
   req.session.score = 0;
   console.log("시작 점수 : " + req.session.score);
   res.render("game.ejs", { keywords });

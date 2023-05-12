@@ -3,15 +3,8 @@ import session from "express-session";
 import { mainRouter } from "./router/mainRouter.js";
 import { apiRouter } from "./router/apiRouter.js";
 import morgan from "morgan";
-import { Server } from "socket.io";
-import { createServer } from "http";
-import { memoryStorage } from "multer";
 
 const app = express();
-
-const server = createServer(app);
-
-export const io = new Server(server, {});
 
 app.use(express.json());
 const logger = morgan("dev");
